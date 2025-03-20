@@ -187,7 +187,7 @@ class Segmenter:
     def clear_segmentation_mask(self):
         self.segmentation_mask = np.zeros(self.data.shape)
 
-
+print(os.getcwd())
 image = sitk.ReadImage("data/planning/pelvis_ct.nii.gz")
 
 size = image.GetSize()
