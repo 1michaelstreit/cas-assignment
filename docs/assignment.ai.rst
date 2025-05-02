@@ -16,7 +16,7 @@ GPU by UBELIX
 
 `UBELIX <https://ubelix.unibe.ch>`_ is an acronym and stands for University of Bern Linux Cluster, which is aimed for High Performance Computing (HPC). UBELIX is available to anybody with a valid Campus Account (CA) of the University of Bern. Before you can use this service, you must request the activation of your Campus Account on UBELIX.
 
-Follow the instructions on the `HPC documentation webpage <https://hpc-unibe-ch.github.io/getting-Started/account.html>`_ to request activation of your account:
+Follow the instructions on the `HPC documentation webpage <https://hpc-unibe-ch.github.io/firststeps/>`_ to request activation of your account:
 
 - mention that you will use deep learning for medical image analysis within the course "Computer Assisted Surgery" of the Master in Biomedical Engineering
 - mention that you need access to a GPU
@@ -51,7 +51,7 @@ https://serviceportal.unibe.ch/sp?id=kb_category&kb_id=13b050c9db63c49078ed3e482
 
 		[<username>@submit01 ~]$
 
-- see the `official documentation <https://hpc-unibe-ch.github.io/getting-Started/login-ssh.html>`_ if needed
+- see the `official documentation <https://hpc-unibe-ch.github.io/firststeps/>`_ if needed
 
 
 File Transfer to/from UBELIX
@@ -69,7 +69,7 @@ To copy a file from the HPC to your local computer, also use the ``scp`` command
 
 	scp <username>@submit01.unibe.ch:/path/to/file /path/to/target_dir/
     
-More information about file transfer can be found in the `official documentation <https://hpc-unibe-ch.github.io/file-system/file-transfer.html>`__.
+More information about file transfer can be found in the `official documentation <https://hpc-unibe-ch.github.io/firststeps/movingdata/>`__.
 
 
 File editor on Ubelix
@@ -207,13 +207,13 @@ Report and Grading
 
 The assignment accounts for 25% of the grade for the assignments.
 
-Run the deep learning model for hip CT image segmentation, and write a short report where you answer the following questions.
+Run the deep learning model for hip CT image segmentation, and write a short report where you answer the following questions. Add your Name and follow the structure of the questions below.
 
 #. Experiment Running (2 points)
 
-	- Show the 3D models of automatic segmentation and ground truth segmentation in individual ITK-SNAP applications, and then compare them qualitatively (1 points)
-	- Show the training loss curve. Do a screenshot of the loss curve. (0.5 point)
-	- What is your evaluation result of Dice, ASD, and HD? Do a screenshot of the resulting text file (0.5 point)
+	- Show the 3D models of automatic segmentation and ground truth segmentation in individual ITK-SNAP applications, and then compare them qualitatively. (1 points)
+	- Show the training loss curve with a screenshot. (0.5 point)
+	- What is your evaluation result of Dice, ASD, and HD? Do a screenshot of the resulting text file and comment the results. (0.5 point)
 	
 	
 #. Fine tuning the Model (4 points)
@@ -228,10 +228,10 @@ Run the deep learning model for hip CT image segmentation, and write a short rep
 			python test.py --load_epoch 5 --load_ckpt ./checkpoint_lr_low --save_pred_affix_name lr_low
 			python evaluate.py  --save_pred_affix_name lr_low
 
-	- Compare three training loss curves with normal, low and high learning rates.  What is your observation and conclusion? (1 point)
-	- Compare the evaluation result of Dice, ASD, and HD of three models with normal, low and high learning rate? Which model reports the best accuracy? (1 point)
+	- Compare three training loss curves with normal, low and high learning rates. What is your observation and conclusion? (1 point)
+	- Compare the evaluation result of Dice, ASD, and HD of three models with normal, low and high learning rate. Which model reports the best accuracy? (1 point)
 	- Compare the segmentation prediction results qualitatively of three models in ITK-SNAP and explain the differences? Do you think those models can be used for surgical planning, or how could we improve this model? (1 point)
-	- Fine tune the hyper-parameters (number of training epochs and learning rate), and report the best accuracy you get in both qualitative and quantitative. (1 point)
+	- Fine tune the hyper-parameters (number of training epochs and learning rate), and report the best accuracy you get both qualitatively and quantitatively. (1 point)
 
 .. #. Questions (4 points)
 
