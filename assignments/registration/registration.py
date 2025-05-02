@@ -1,5 +1,6 @@
 # Copyright (c) 2025 University of Bern. All rights reserved.
 import numpy as np
+import cas.registration.util as util
 
 def paired_point_matching(source, target):
     """
@@ -18,6 +19,29 @@ def paired_point_matching(source, target):
 
     ## TODO: your code goes here
 
+    # Target = Reference = r, source = floating = l
+
+    # centroid
+    ul = np.mean(source, axis=0)
+    ur = np.mean(target, axis=0)
+
+    plCen = source - ul
+    prCen = target - ur
+
+    # covariance matrix
+    M = plCen.T @ prCen
+
+    # SVD / rotation
+    U, W, Vt = np.linalg.svd(M)
+    R = Vt.T @ U.T
+
+    # translation
+    t = ur - R@ul
+
+    # Transformation matrix
+    T[:3,:3] = R
+    T[:3,3] = t
+
     return T, R, t
 
 
@@ -29,8 +53,21 @@ def get_initial_pose(source, target):
     :return: An initial 4 x 4 rigid transformation matrix.
     """
     T = np.eye(4)
+    R = np.eye(3)
 
     ## TODO: Your code goes here
+
+    t = np.array([600, 0, 0])
+
+    R = np.array([[1, 0, 0],
+                 [0, 0, -1],
+                 [0, 1, 0]])
+
+    #T = np.eye(4)
+    #R = np.eye(3)
+
+    T[:3,:3] = R
+    T[:3,3] = t
 
     return T
 
@@ -47,7 +84,16 @@ def find_nearest_neighbor(source, target):
     """
 
     ## TODO: replace this by your code
-    pass
+    distances = np.zeros(source.shape[0])
+    indices = np.zeros(source.shape[0], dtype=int)
+
+    for i, point in enumerate(source):
+        diff = target - point # difference x,y,z of each target point to actual point
+        dists = np.linalg.norm(diff, axis=1) # calc distance of each row with norm
+        indices[i] = np.argmin(dists) # stores index of smallest distance
+        distances[i] = dists[indices[i]] # stores the minimal distance
+
+    return distances, indices
 
 
 def icp(source, target, init_pose=None, max_iterations=10, tolerance=0.0001):
@@ -67,5 +113,35 @@ def icp(source, target, init_pose=None, max_iterations=10, tolerance=0.0001):
     error = np.finfo(float).max
 
     ## TODO: Your code goes here
+    prev_error = np.inf
+    T = init_pose
+
+    src = util.make_homogenous(source)
+    srcTransf = np.dot(T, src.T).T[:, :3]
+
+    for i in range(max_iterations):
+
+        # find nearest neighbors
+        distances, indices = find_nearest_neighbor(srcTransf, target)
+        matched_target = target[indices]
+
+        # calculate new transformation
+        delta_T, _, _ = paired_point_matching(srcTransf, matched_target)
+
+        T = delta_T @ T
+
+        src = util.make_homogenous(source)
+        srcTransf = np.dot(T, src.T).T[:, :3]
+
+
+        # compute RMSE
+        rmse = np.sqrt(np.mean(distances**2))
+
+        if np.abs(prev_error - rmse) < tolerance:
+            break
+
+        prev_error = rmse
+
+    error = rmse
 
     return T, distances, error
